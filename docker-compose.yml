@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # Nginx Reverse Proxy - Protects app-1, app-2, and app-3
+  reverse-proxy:
+    image: nginx:alpine
+    container_name: reverse-proxy
+    ports:
+      - "8080:80"
+    volumes:
+      - ./reverse-proxy/nginx-simple.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - minics-website
+      - cfm-farm-management
+      - attendancetrack
+    restart: unless-stopped
+    networks:
+      - internal-net
+      - external-network
+
+  # App-1: Minics E-commerce Website (Protected by reverse proxy)
+  minics-website:
+    image: mondestin/minics-website:latest
+    container_name: minics-website
+    expose:
+      - "80"
+    restart: unless-stopped
+    networks:
+      - internal-net
+
+  # App-2: CFM Farm Management (Protected by reverse proxy)
+  cfm-farm-management:
+    image: mondestin/cfm-farm-management:latest
+    container_name: cfm-farm-management
+    expose:
+      - "80"
+    restart: unless-stopped
+    networks:
+      - internal-net
+
+  # App-3: AttendanceTrack API (Protected by reverse proxy)
+  attendancetrack:
+    image: mondestin/attendancetrack:latest
+    container_name: attendancetrack
+    expose:
+      - "80"
+    environment:
+      - FIREBASE_SERVICE_ACCOUNT_KEY=${FIREBASE_SERVICE_ACCOUNT_KEY}
+      - FIREBASE_CONFIG=${FIREBASE_CONFIG}
+      - STRIPE_SK=${STRIPE_SK}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+    restart: unless-stopped
+    networks:
+      - internal-net
+
+  # App-4: Web DVWA (Direct access, not protected by reverse proxy)
+  web-dvwa:
+    image: mondestin/web-dvwa:latest
+    container_name: web-dvwa
+    ports:
+      - "8081:80"
+    restart: unless-stopped
+    networks:
+      - external-network
+
+networks:
+  internal-net:
+    driver: bridge
+  external-network:
+    driver: bridge 
