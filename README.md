@@ -33,7 +33,7 @@ Ce projet démontre une configuration DevSecOps complète avec quatre applicatio
 | **Gelvy Mondestin MYSSIE BINGHA** | Dockerisation et optimisation de l'application Attendance (app3 - AttendanceTrack) |
 | **Michael RAZAFIMANDIMBY** | Dockerisation et optimisation de l'application CFM (app2 - CFM Farm Management) |
 | **Papa Alioune DIALLO** | Configuration du reverse-proxy et du docker-compose, infrastructure as code |
-| **Piéraly Mourade STEP** | Documentation, création du schéma d'architecture, coordination de la CI/CD dans l'app AttendanceTrack |
+| **Piéraly Mourade STEPHANE** | Documentation, création du schéma d'architecture, coordination de la CI/CD dans l'app AttendanceTrack |
 
 ### Repositories Git et Docker Hub
 
